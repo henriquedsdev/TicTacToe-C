@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <locale.h>
-#include <windows.h>
-#include <limits.h>
+#include <time.h> //biblioteca para funções de tempo de espera
+#include <locale.h> //biblioteca para funções de tradução de linguagem
+#include <windows.h> //biblioteca para funções de tempo de espera
+#include <limits.h> //biblioteca para adicionar os limites max e min dos tipos de variáveis
 
-#define COLOR_ON "\e[1;96m"
-#define COLOR_OFF "\e[m"
+#define COLOR_ON "\e[1;96m" //constante que contem código de cor para destaque do ganhador
+#define COLOR_OFF "\e[m"    //constante que contem código de cor para tirar destaque do ganhador
 
-int gboard[3][3];
+int gboard[3][3]; //vetor representante do tabuleiro
 
-void init_board() {
+void init_board() {                 //função para iniciar o tabuleiro
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             gboard[i][j] = 0;
@@ -18,12 +18,12 @@ void init_board() {
     }
 }
 
-void clean_buf() {
+void clean_buf() {   //função para limpar buffer de entrada do teclado
     int c;
     while((c = getchar()) != '\n' && c != EOF);
 }
 
-void print_board() {
+void print_board() {       //função para imprimir tabuleiro
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if(gboard[i][j] == 1) {
@@ -48,7 +48,7 @@ void print_board() {
     printf("\n\n");
 }
 
-int choose_player() {
+int choose_player() {     //função para escolher primeiro jogador
     int choose;
     do {
         printf("Quem será o primeiro jogador: \n1 - COMPUTADOR\n2 - JOGADOR HUMANO\n\n");
@@ -66,7 +66,7 @@ int choose_player() {
     return choose;
 }
 
-int check_move(int row, int column) {
+int check_move(int row, int column) {      //função para checar se movimento pode ocorrer e é válido
     int r = row - 1, c = column - 1;
     if(r < 0 || r > 2 || c < 0 || c > 2)
         return 0;
@@ -76,7 +76,7 @@ int check_move(int row, int column) {
         return 1;
 }
 
-void player_move(int move[2]) {
+void player_move(int move[2]) {       //função para captar jogada do jogador humano
     int column, row, flag;
     do {
         system("cls");
@@ -102,11 +102,11 @@ void player_move(int move[2]) {
     } while(!flag);
 }
 
-void exec_move(int move[2], int player) {
+void exec_move(int move[2], int player) {     //função para executar movimento, seja da máquina ou do jogador humano
     gboard[move[0]][move[1]] = player;
 }
 
-int check_winner(int player) {
+int check_winner(int player) {               //função para verificar se houve ganhador
     for(int i = 0; i < 3; i++) {
         if(gboard[i][0] == player && gboard[i][1] == player && gboard[i][2] == player)
             return 1;
@@ -121,8 +121,8 @@ int check_winner(int player) {
         return 1;
     return 0;
 }
-
-int check_draw() {
+ 
+int check_draw() {             //função para verificar se houve empate
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if(gboard[i][j] == 0)
@@ -132,7 +132,7 @@ int check_draw() {
     return 1;
 }
 
-int check_pontuation() {
+int check_pontuation() {         //função para retornar quem ganhou no algoritmo minimax
     if(check_winner(1) == 1)
         return 1;
     if(check_winner(2) == 1)
@@ -140,7 +140,7 @@ int check_pontuation() {
     return 0;
 }
 
-int minimax(int maxmin) {
+int minimax(int maxmin) {          //função minimax, a qual gera as possibilidades de jogada para a máquina
     int value = check_pontuation();
 
     if(value != 0)
@@ -189,7 +189,7 @@ int minimax(int maxmin) {
     }
 }
 
-void pc_move(int move[2]) {
+void pc_move(int move[2]) {      //função para captar jogada da máquina, que chama a função minimax para realizar a lógica minimax
     int finalValue = INT_MIN;
 
     for (int i = 0; i < 3; i++) {
@@ -209,7 +209,7 @@ void pc_move(int move[2]) {
     }
 }
 
-void highligh_win(int winner) {
+void highligh_win(int winner) {           //função de destaque da linha ganhadora do tabuleiro
     for(int i = 0; i < 3; i++) {
         if(gboard[i][0] == winner && gboard[i][1] == winner && gboard[i][2] == winner) {
             gboard[i][0] = winner * 10;
@@ -236,16 +236,16 @@ void highligh_win(int winner) {
     }
 }
 
-int main() {
+int main() {        //função principal, a qual ocorre o jogo
     setlocale(LC_ALL, "Portuguese_Brazil");
     system("cls");
 
-    int player = choose_player();
-    int end = 0, move[2];
-    int winner;
+    int player = choose_player();   //variavel que armazena o jogador
+    int end = 0, move[2];      //end = variavel que verifica a condição de fim de jogo   move = vetor que guarda posições do tabuleiro para executar jogadas
+    int winner;            //variavel que guarda quem foi o jogador
     init_board();
 
-    do {
+    do {                        //loop do jogo, o qual ocorre os movimentos da máquina e do jogador humano e termina ao final do jogo
         if(player == 1) {
             pc_move(move);
             exec_move(move, player);
@@ -266,7 +266,7 @@ int main() {
 
     system("cls");
     
-    if(check_draw() == 1) {
+    if(check_draw() == 1) {           //laço if-else para verificar o fim do jogo e se houve empate ou um ganhador.
         print_board();
         printf("EMPATE!!!\n\n");
     }
