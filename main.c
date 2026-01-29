@@ -5,6 +5,9 @@
 #include <windows.h>
 #include <limits.h>
 
+#define COLOR_ON "\e[1;96m"
+#define COLOR_OFF "\e[m"
+
 int gboard[3][3];
 
 void init_board() {
@@ -28,6 +31,12 @@ void print_board() {
             }
             else if(gboard[i][j] == 2) {
                 printf("O");
+            }
+            else if(gboard[i][j] == 10) {
+                printf(COLOR_ON "X" COLOR_OFF);
+            }
+            else if(gboard[i][j] == 20) {
+                printf(COLOR_ON "O" COLOR_OFF);
             }
             else {
                 printf(" ");
@@ -200,6 +209,33 @@ void pc_move(int move[2]) {
     }
 }
 
+void highligh_win(int winner) {
+    for(int i = 0; i < 3; i++) {
+        if(gboard[i][0] == winner && gboard[i][1] == winner && gboard[i][2] == winner) {
+            gboard[i][0] = winner * 10;
+            gboard[i][1] = winner * 10;
+            gboard[i][2] = winner * 10;
+        }
+    }
+    for(int i = 0; i < 3; i++) {
+        if(gboard[0][i] == winner && gboard[1][i] == winner && gboard[2][i] == winner) {
+            gboard[0][i] = winner * 10;
+            gboard[1][i] = winner * 10;
+            gboard[2][i] = winner * 10;
+        }
+    }
+    if(gboard[0][0] == winner && gboard[1][1] == winner && gboard[2][2] == winner) {
+        gboard[0][0] = winner * 10;
+        gboard[1][1] = winner * 10;
+        gboard[2][2] = winner * 10;
+    }
+    if(gboard[0][2] == winner && gboard[1][1] == winner && gboard[2][0] == winner) {
+        gboard[0][2] = winner * 10;
+        gboard[1][1] = winner * 10;
+        gboard[2][0] = winner * 10;
+    }
+}
+
 int main() {
     setlocale(LC_ALL, "Portuguese_Brazil");
     system("cls");
@@ -229,15 +265,19 @@ int main() {
     } while(end == 0);
 
     system("cls");
-    print_board();
     
     if(check_draw() == 1) {
+        print_board();
         printf("EMPATE!!!\n\n");
     }
     else if(winner == 1){
+        highligh_win(winner);
+        print_board();
         printf("VENCEDOR: COMPUTADOR!!!\n\n");
     }
     else {
+        highligh_win(winner);
+        print_board();
         printf("VENCEDOR: JOGADOR HUMANO!!!\n\n");
     }
 
