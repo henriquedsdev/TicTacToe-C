@@ -28,6 +28,7 @@ O programa Tic-Tac-Toe foi desenvolvido em linguagem C no Visual Studio Code. Pa
 10. Na seção de "Variáveis do Sistema", clique em Path, depois em editar;
 11. Adicione um novo caminho e coloque o caminho da pasta "bin" do mingw (geralmente será: C:\MinGW\bin);
 12. Depois apenas aplique as modificações clicando em "ok";
+obs.: Caso ainda haja falhas de linguagem e os enunciados em português estiverem sendo impressos no cmd sem a devida acentuação e pontuação, deve-se trocar o "encoding" do Visual Studio (no canto inferior direito do programa) de "UTF-8" para "Western (ISO 8859-1)";
 
 Em caso de dúvida, acesse o vídeo no link a seguir: https://www.youtube.com/watch?v=Mook-z2uvpM;
 
